@@ -8,12 +8,19 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
+app.set('trust proxy', 1); // trust first proxy
 const PORT = 3000;
 
 // Config
 const LOG_FILE = path.join(__dirname, 'logs', 'login_attempts.json');
 const MAX_FAILED_ATTEMPTS = 5;
 const BLOCK_TIME_MINUTES = 30;
+
+// Ensure logs directory exists
+const LOG_DIR = path.join(__dirname, 'logs');
+if (!fs.existsSync(LOG_DIR)) {
+  fs.mkdirSync(LOG_DIR);
+}
 
 // In-memory store for failed attempts and blocked IPs
 const failedAttempts = {};
